@@ -1,14 +1,14 @@
 // For format details, see https://aka.ms/vscode-remote/devcontainer.json or the definition README at
 // https://github.com/microsoft/vscode-dev-containers/tree/master/containers/azure-cli
 {
-	"name": "My Dev Container",
+	"name": "Zero to AKS Private",
 	"image": "ateamsw/devcontainer:latest",
 	
 	// Uncomment the next line to have VS Code connect as an existing non-root user in the container. 
 	// On Linux, by default, the container user's UID/GID will be updated to match your local user. See
 	// https://aka.ms/vscode-remote/containers/non-root for details on adding a non-root user if none exist.
-	"remoteUser": "vscode",
-
+	//"remoteUser": "vscode",
+	
 	// Uncomment the next line if you will use a ptrace-based debugger like C++, Go, and Rust
 	// "runArgs": [ "--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined" ],
 
@@ -20,9 +20,9 @@
 
 	"mounts": [
 		"source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
-		"source=${localEnv:HOME}${localEnv:USERPROFILE}/.azure,target=/home/vscode/.azure,type=bind",
-		"source=${localEnv:HOME}${localEnv:USERPROFILE}/.kube,target=/home/vscode/.kube,type=bind",
-		"source=${localEnv:HOME}${localEnv:USERPROFILE}/.git,target=/home/vscode/.config/git,type=bind"
+		"source=${localEnv:HOME}${localEnv:USERPROFILE}/.azure,target=/root/.azure,type=bind",
+		"source=${localEnv:HOME}${localEnv:USERPROFILE}/.kube,target=/root/.kube,type=bind",
+		"source=${localEnv:HOME}${localEnv:USERPROFILE}/.git,target=/root/.config/git,type=bind"
 	],
 
 	// Use 'appPort' to create a container with published ports. If the port isn't working, be sure
