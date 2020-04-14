@@ -117,7 +117,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   kubernetes_version  = var.aks_version
 
   default_node_pool {
-    name       = "default"
+    name       = "lnx000"
     node_count = var.node_count
     vm_size    = var.node_vm_sku
     # node_taints
@@ -165,4 +165,16 @@ resource "azurerm_kubernetes_cluster" "aks" {
   depends_on = [
     module.service_principal.client_id
   ]
+}
+
+resource "azurerm_kubernetes_cluster_node_pool" "winnodepool" {
+  name                  = "win001"
+  kubernetes_cluster_id = azurerm_kubernetes_cluster.aks.id
+  vm_size               = "Standard_DS2_v2"
+  node_count            = 1
+  os_type               = "Windows"
+
+  tags = {
+    Environment = "Production"
+  }
 }
