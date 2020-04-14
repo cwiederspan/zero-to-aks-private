@@ -21,8 +21,7 @@
 	"mounts": [
 		"source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
 		"source=${localEnv:HOME}${localEnv:USERPROFILE}/.azure,target=/root/.azure,type=bind",
-		"source=${localEnv:HOME}${localEnv:USERPROFILE}/.kube,target=/root/.kube,type=bind",
-		"source=${localEnv:HOME}${localEnv:USERPROFILE}/.git,target=/root/.config/git,type=bind"
+		"source=${localEnv:HOME}${localEnv:USERPROFILE}/.kube,target=/root/.kube,type=bind"
 	],
 
 	// Use 'appPort' to create a container with published ports. If the port isn't working, be sure
