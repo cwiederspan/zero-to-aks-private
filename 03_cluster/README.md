@@ -23,4 +23,5 @@ terraform apply \
 -var 'vnet_rg_name=cdw-privateaks-network-20200406' \
 -var 'vnet_name=cdw-mynetwork-20200406' \
 -var 'cluster_subnet_name=cluster-subnet' \
+-var 'nodes=3'
 --var-file=secrets.tfvars
