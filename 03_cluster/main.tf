@@ -12,13 +12,13 @@ provider "azurerm" {
 }
 
 # Define Kubernetes provider to use the AKS cluster
-provider "kubernetes" {
-  version = "~> 1.11"
-  host                   = azurerm_kubernetes_cluster.aks.kube_config.0.host
-  client_certificate     = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.client_certificate)
-  client_key             = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.client_key)
-  cluster_ca_certificate = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.cluster_ca_certificate)
-}
+# provider "kubernetes" {
+#   version = "~> 1.11"
+#   host                   = azurerm_kubernetes_cluster.aks.kube_config.0.host
+#   client_certificate     = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.client_certificate)
+#   client_key             = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.client_key)
+#   cluster_ca_certificate = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.cluster_ca_certificate)
+# }
 
 variable "name_prefix" {
   type        = string
@@ -174,7 +174,6 @@ resource "azurerm_kubernetes_cluster_node_pool" "winnodepool" {
   node_count            = 1
   os_type               = "Windows"
 
-  tags = {
-    Environment = "Production"
-  }
+  # Required for advanced networking
+  vnet_subnet_id = data.azurerm_subnet.cluster.id
 }

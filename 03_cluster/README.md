@@ -13,6 +13,18 @@ terraform init --backend-config backend-secrets.tfvars
 
 ```bash
 
+terraform plan \
+-var 'name_prefix=cdw' \
+-var 'name_base=privateaks-cluster' \
+-var 'name_suffix=20200406' \
+-var 'aks_version=1.16.7' \
+-var 'location=westus2' \
+-var 'vnet_rg_name=cdw-privateaks-network-20200406' \
+-var 'vnet_name=cdw-mynetwork-20200406' \
+-var 'cluster_subnet_name=cluster-subnet' \
+-var 'node_count=3' \
+--var-file=secrets.tfvars
+
 # Apply the script with the specified variable values
 terraform apply \
 -var 'name_prefix=cdw' \
@@ -23,5 +35,5 @@ terraform apply \
 -var 'vnet_rg_name=cdw-privateaks-network-20200406' \
 -var 'vnet_name=cdw-mynetwork-20200406' \
 -var 'cluster_subnet_name=cluster-subnet' \
--var 'nodes=3'
+-var 'node_count=3' \
 --var-file=secrets.tfvars
