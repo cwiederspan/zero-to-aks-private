@@ -82,6 +82,12 @@ variable "cluster_subnet_name" {
   description = "The subnet within the vnet to create the cluster within."
 }
 
+variable "authorized_ip_addresses" {
+  type        = list(string)
+  description = "A list of CIDR block strings that can access the Kubernetes API endpoint."
+  default = [ ]
+}
+
 locals {
   base_name = "${var.name_prefix}-${var.name_base}-${var.name_suffix}"
 }
@@ -116,6 +122,8 @@ resource "azurerm_kubernetes_cluster" "aks" {
   dns_prefix          = local.base_name
   kubernetes_version  = var.aks_version
 
+  api_server_authorized_ip_ranges = var.authorized_ip_addresses
+
   default_node_pool {
     name       = "lnx000"
     node_count = var.node_count
@@ -142,6 +150,11 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
   
   addon_profile {
+    
+    azure_policy {
+      enabled = true
+    }
+
     oms_agent {
       enabled                    = true
       log_analytics_workspace_id = module.monitoring.workspace_id

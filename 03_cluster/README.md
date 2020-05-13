@@ -13,6 +13,7 @@ terraform init --backend-config backend-secrets.tfvars
 
 ```bash
 
+# Run the plan to see the changes
 terraform plan \
 -var 'name_prefix=cdw' \
 -var 'name_base=privateaks-cluster' \
