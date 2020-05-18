@@ -7,7 +7,7 @@ terraform {
 }
 
 provider "azurerm" {
-  version = "~> 2.4"
+  version = "~> 2.10"
   features {}
 }
 
@@ -49,21 +49,21 @@ resource "azurerm_subnet" "gateway" {
   name                 = local.gateway_subnet_name
   resource_group_name  = azurerm_resource_group.group.name
   virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefix       = "10.0.1.0/24"
+  address_prefixes     = ["10.0.1.0/24"]
 }
 
 resource "azurerm_subnet" "ingress" {
   name                 = local.ingress_subnet_name
   resource_group_name  = azurerm_resource_group.group.name
   virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefix       = "10.0.2.0/24"
+  address_prefixes     = ["10.0.2.0/24"]
 }
 
 resource "azurerm_subnet" "bastion" {
   name                 = local.bastion_subnet_name
   resource_group_name  = azurerm_resource_group.group.name
   virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefix       = "10.0.3.0/24"
+  address_prefixes     = ["10.0.3.0/24"]
 
   delegation {
     name = "aci-subnet-delegation"
@@ -78,5 +78,5 @@ resource "azurerm_subnet" "cluster" {
   name                 = local.cluster_subnet_name
   resource_group_name  = azurerm_resource_group.group.name
   virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefix       = "10.1.0.0/16"
+  address_prefixes     = ["10.1.0.0/16"]
 }
