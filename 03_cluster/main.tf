@@ -11,15 +11,6 @@ provider "azurerm" {
   features {}
 }
 
-# Define Kubernetes provider to use the AKS cluster
-# provider "kubernetes" {
-#   version = "~> 1.11"
-#   host                   = azurerm_kubernetes_cluster.aks.kube_config.0.host
-#   client_certificate     = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.client_certificate)
-#   client_key             = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.client_key)
-#   cluster_ca_certificate = base64decode(azurerm_kubernetes_cluster.aks.kube_config.0.cluster_ca_certificate)
-# }
-
 variable "name_prefix" {
   type        = string
   description = "A prefix for the naming scheme as part of prefix-base-suffix."
@@ -152,7 +143,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   addon_profile {
     
     azure_policy {
-      enabled = true
+      enabled = false #true
     }
 
     oms_agent {
@@ -189,4 +180,12 @@ resource "azurerm_kubernetes_cluster_node_pool" "winnodepool" {
 
   # Required for advanced networking
   vnet_subnet_id = data.azurerm_subnet.cluster.id
+}
+
+output "client_id" {
+  value = module.service_principal.client_id
+}
+
+output "client_secret" {
+  value = module.service_principal.client_secret
 }
