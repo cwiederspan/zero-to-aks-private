@@ -5,7 +5,9 @@
 ```bash
 
 # Use remote storage
-terraform init --backend-config backend-secrets.tfvars
+terraform init \
+--backend-config ../config/backend-secrets.tfvars \
+--backend-config "key=cluster.tfstate"
 
 ```
 
