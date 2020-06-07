@@ -185,7 +185,3 @@ resource "azurerm_kubernetes_cluster_node_pool" "winnodepool" {
 output "client_id" {
   value = module.service_principal.client_id
 }
-
-output "client_secret" {
-  value = module.service_principal.client_secret
-}

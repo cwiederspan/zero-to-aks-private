@@ -37,7 +37,3 @@ resource "azuread_service_principal_password" "aks" {
 output "client_id" {
   value = azuread_application.aks.application_id
 }
-
-output "client_secret" {
-  value = azuread_service_principal_password.aks.value
-}

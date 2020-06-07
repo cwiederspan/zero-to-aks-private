@@ -26,3 +26,5 @@ terraform apply \
 -var 'ingress_namespace=ingress-basic' \
 -var 'aks_rg=cdw-privateaks-cluster-20200406' \
 -var 'aks_name=cdw-privateaks-cluster-20200406'
+
+```
