@@ -76,7 +76,13 @@ variable "cluster_subnet_name" {
 variable "authorized_ip_addresses" {
   type        = list(string)
   description = "A list of CIDR block strings that can access the Kubernetes API endpoint."
-  default = [ ]
+  default     = [ ]
+}
+
+variable "enable_azure_policy" {
+  type        = bool
+  description = "A flag for enabling Azure Policy for AKS (currently in Preview)."
+  default     = false
 }
 
 locals {
@@ -143,7 +149,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   addon_profile {
     
     azure_policy {
-      enabled = false #true
+      enabled = var.enable_azure_policy
     }
 
     oms_agent {
@@ -182,6 +188,6 @@ resource "azurerm_kubernetes_cluster_node_pool" "winnodepool" {
   vnet_subnet_id = data.azurerm_subnet.cluster.id
 }
 
-output "client_id" {
-  value = module.service_principal.client_id
-}
+# output "client_id" {
+#   value = module.service_principal.client_id
+# }
