@@ -26,11 +26,6 @@ provider "helm" {
   }
 }
 
-variable "ingress_namespace" {
-  type        = string
-  description = "The namespace where the ingress controller will be installed."
-}
-
 variable "aks_rg" {
   type        = string
   description = "The name of the resource group where the AKS cluster resides."
@@ -41,41 +36,60 @@ variable "aks_name" {
   description = "The name of the AKS cluster to access."
 }
 
+variable "flux_namespace" {
+  type        = string
+  description = "The namespace where flux will be installed."
+  default     = "flux"
+}
+
+variable "flux_repo" {
+  type        = string
+  description = "The git repo from which flux will deploy manifests."
+}
+
 data "azurerm_kubernetes_cluster" "aks" {
   resource_group_name = var.aks_rg
   name                = var.aks_name
 }
 
-resource "kubernetes_namespace" "ingress" {
+resource "kubernetes_namespace" "flux" {
   metadata {
-    name = var.ingress_namespace
+    name = var.flux_namespace
   }
 }
 
-resource "helm_release" "ingress" {
-  name      = "nginx-ingress"
-  repository = "https://helm.nginx.com/stable"
-  chart     = "nginx-ingress"
+resource "helm_release" "flux" {
+  name      = "flux"
+  repository = "https://charts.fluxcd.io"
+  chart     = "flux"
   #version = "3.3.3"
-  namespace = kubernetes_namespace.ingress.metadata[0].name
+  namespace = kubernetes_namespace.flux.metadata[0].name
 
   set {
-    name  = "controller.replicaCount"
-    value = 2
-  }
-
-  set {
-    name  = "controller.healthStatus"
-    value = "true"
-  }
-
-  set {
-    name  = "controller.nodeSelector.beta\\.kubernetes\\.io/os"
-    value = "linux"
-  }
-
-  set {
-    name  = "defaultBackend.nodeSelector.beta\\.kubernetes\\.io/os"
-    value = "linux"
+    name  = "git.url"
+    value = var.flux_repo
   }
 }
+
+resource "helm_release" "helm-operator" {
+  name      = "helm-operator"
+  repository = "https://charts.fluxcd.io"
+  chart     = "helm-operator"
+  #version = "3.3.3"
+  namespace = kubernetes_namespace.flux.metadata[0].name
+
+  set {
+    name  = "git.ssh.secretName"
+    value = "flux-git-deploy"
+  }
+  
+  set {
+    name  = "helm.versions"
+    value = "v3"
+  }
+
+  depends_on = [
+    helm_release.flux
+  ]
+}
+
