@@ -177,16 +177,16 @@ resource "azurerm_kubernetes_cluster" "aks" {
   ]
 }
 
-resource "azurerm_kubernetes_cluster_node_pool" "winnodepool" {
-  name                  = "win001"
-  kubernetes_cluster_id = azurerm_kubernetes_cluster.aks.id
-  vm_size               = "Standard_DS2_v2"
-  node_count            = 1
-  os_type               = "Windows"
+# resource "azurerm_kubernetes_cluster_node_pool" "winnodepool" {
+#   name                  = "win001"
+#   kubernetes_cluster_id = azurerm_kubernetes_cluster.aks.id
+#   vm_size               = "Standard_DS2_v2"
+#   node_count            = 1
+#   os_type               = "Windows"
 
-  # Required for advanced networking
-  vnet_subnet_id = data.azurerm_subnet.cluster.id
-}
+#   # Required for advanced networking
+#   vnet_subnet_id = data.azurerm_subnet.cluster.id
+# }
 
 # output "client_id" {
 #   value = module.service_principal.client_id

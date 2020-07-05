@@ -92,4 +92,3 @@ resource "helm_release" "helm-operator" {
     helm_release.flux
   ]
 }
-

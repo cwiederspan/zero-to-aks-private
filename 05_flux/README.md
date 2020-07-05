@@ -25,6 +25,6 @@ terraform plan \
 terraform apply \
 -var 'aks_rg=cdw-privateaks-cluster-20200406' \
 -var 'aks_name=cdw-privateaks-cluster-20200406' \
--var 'flux_repo=https://github.com/cwiederspan/zero-to-aks-flux.git'
+-var 'flux_repo=git@github.com:cwiederspan/zero-to-aks-flux'
 
 ```
