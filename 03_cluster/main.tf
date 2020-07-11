@@ -123,9 +123,11 @@ resource "azurerm_kubernetes_cluster" "aks" {
   api_server_authorized_ip_ranges = var.authorized_ip_addresses
 
   default_node_pool {
-    name       = "lnx000"
-    node_count = var.node_count
-    vm_size    = var.node_vm_sku
+    name                 = "lnx000"
+    node_count           = var.node_count
+    vm_size              = var.node_vm_sku
+    orchestrator_version = var.aks_version
+
     # node_taints
     # node_labels
 
@@ -148,6 +150,10 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
   
   addon_profile {
+
+    kube_dashboard {
+      enabled = true
+    }
     
     azure_policy {
       enabled = var.enable_azure_policy
@@ -157,6 +163,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
       enabled                    = true
       log_analytics_workspace_id = module.monitoring.workspace_id
     }
+
     # http_application_routing {
     #   enabled = true
     # }
