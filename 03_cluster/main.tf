@@ -34,6 +34,7 @@ variable "location" {
 variable "aks_version" {
   type        = string
   description = "The Azure region where the resources will be created."
+  default     = "1.17.7"
 }
 
 variable "node_count" {

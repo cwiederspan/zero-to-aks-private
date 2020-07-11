@@ -20,7 +20,6 @@ terraform plan \
 -var 'name_prefix=cdw' \
 -var 'name_base=privateaks-cluster' \
 -var 'name_suffix=20200406' \
--var 'aks_version=1.16.9' \
 -var 'location=westus2' \
 -var 'enable_azure_policy=true' \
 -var 'vnet_rg_name=cdw-privateaks-network-20200406' \
@@ -34,7 +33,6 @@ terraform apply \
 -var 'name_prefix=cdw' \
 -var 'name_base=privateaks-cluster' \
 -var 'name_suffix=20200406' \
--var 'aks_version=1.16.9' \
 -var 'location=westus2' \
 -var 'enable_azure_policy=true' \
 -var 'vnet_rg_name=cdw-privateaks-network-20200406' \
