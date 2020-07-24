@@ -88,6 +88,11 @@ resource "helm_release" "helm-operator" {
     value = "v3"
   }
 
+  set {
+    name  = "manifestGeneration"
+    value = true
+  }
+
   depends_on = [
     helm_release.flux
   ]
