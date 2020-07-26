@@ -40,3 +40,5 @@ terraform apply \
 -var 'cluster_subnet_name=cluster-subnet' \
 -var 'node_count=2' \
 --var-file=secrets.tfvars
+
+```
