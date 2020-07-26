@@ -90,6 +90,11 @@ resource "helm_release" "flux" {
     name  = "git.pollInterval"
     value = var.flux_poll_interval
   }
+
+  set {
+    name  = "manifestGeneration"
+    value = true
+  }
 }
 
 resource "helm_release" "helm-operator" {
@@ -107,11 +112,6 @@ resource "helm_release" "helm-operator" {
   set {
     name  = "helm.versions"
     value = "v3"
-  }
-
-  set {
-    name  = "manifestGeneration"
-    value = true
   }
 
   depends_on = [
