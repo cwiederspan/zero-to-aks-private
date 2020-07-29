@@ -25,6 +25,8 @@ terraform plan \
 -var 'vnet_rg_name=cdw-privateaks-network-20200406' \
 -var 'vnet_name=cdw-mynetwork-20200406' \
 -var 'cluster_subnet_name=cluster-subnet' \
+-var 'acr_rg_name=cdw-shared-resources' \
+-var 'acr_name=cdwms' \
 -var 'node_count=2' \
 --var-file=secrets.tfvars
 
@@ -38,6 +40,8 @@ terraform apply \
 -var 'vnet_rg_name=cdw-privateaks-network-20200406' \
 -var 'vnet_name=cdw-mynetwork-20200406' \
 -var 'cluster_subnet_name=cluster-subnet' \
+-var 'acr_rg_name=cdw-shared-resources' \
+-var 'acr_name=cdwms' \
 -var 'node_count=2' \
 --var-file=secrets.tfvars
 

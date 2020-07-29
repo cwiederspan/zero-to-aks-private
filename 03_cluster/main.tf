@@ -74,6 +74,16 @@ variable "cluster_subnet_name" {
   description = "The subnet within the vnet to create the cluster within."
 }
 
+variable "acr_rg_name" {
+  type        = string
+  description = "The Azure Container Registry's Resource Group name to setup for pull permissions."
+}
+
+variable "acr_name" {
+  type        = string
+  description = "The Azure Container Registry name to setup for pull permissions."
+}
+
 variable "authorized_ip_addresses" {
   type        = list(string)
   description = "A list of CIDR block strings that can access the Kubernetes API endpoint."
@@ -106,6 +116,11 @@ data "azurerm_subnet" "cluster" {
   resource_group_name  = var.vnet_rg_name
   virtual_network_name = var.vnet_name
   name                 = var.cluster_subnet_name
+}
+
+data "azurerm_container_registry" "acr" {
+  resource_group_name  = var.acr_rg_name
+  name                 = var.acr_name
 }
 
 resource "azurerm_resource_group" "group" {
@@ -199,3 +214,10 @@ resource "azurerm_kubernetes_cluster" "aks" {
 # output "client_id" {
 #   value = module.service_principal.client_id
 # }
+
+resource "azurerm_role_assignment" "acrpull_role" {
+  scope                            = data.azurerm_container_registry.acr.id
+  role_definition_name             = "AcrPull"
+  principal_id                     = module.service_principal.sp_id
+  skip_service_principal_aad_check = true
+}

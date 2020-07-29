@@ -18,26 +18,30 @@ resource "random_string" "password" {
 }
 
 # Create Azure AD Application for Service Principal
-resource "azuread_application" "aks" {
+resource "azuread_application" "app" {
   name = "${var.base_name}-sp"
 }
 
 # Create Service Principal
-resource "azuread_service_principal" "aks" {
-  application_id = azuread_application.aks.application_id
+resource "azuread_service_principal" "sp" {
+  application_id = azuread_application.app.application_id
 }
 
 # Create Service Principal password
-resource "azuread_service_principal_password" "aks" {
+resource "azuread_service_principal_password" "pwd" {
   end_date             = "2299-12-30T23:00:00Z"                        # Forever
-  service_principal_id = azuread_service_principal.aks.id
+  service_principal_id = azuread_service_principal.sp.id
   value                = random_string.password.result
 }
 
+output "sp_id" {
+  value = azuread_service_principal.sp.id
+}
+
 output "client_id" {
-  value = azuread_application.aks.application_id
+  value = azuread_application.app.application_id
 }
 
 output "client_secret" {
-  value = azuread_service_principal_password.aks.value
+  value = azuread_service_principal_password.pwd.value
 }

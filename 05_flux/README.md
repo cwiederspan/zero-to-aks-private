@@ -35,6 +35,9 @@ terraform apply \
 # Get the Flux User credentials
 fluxctl identity --k8s-fwd-ns=flux
 
+# You can get the private key back out of the Kubernetes Secret
+# kubectl get secret flux-git-deploy -n flux -o jsonpath="{.data.identity}" | base64 --decode
+
 # Create a Deployment Key in GitHub with the above value
 
 ```
