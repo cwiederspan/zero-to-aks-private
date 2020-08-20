@@ -7,8 +7,12 @@ terraform {
 }
 
 provider "azurerm" {
-  version = "~> 2.17"
+  version = "~> 2.24"
   features {}
+}
+
+provider "azuread" {
+  version = "~> 0.11"
 }
 
 variable "name_prefix" {
@@ -34,7 +38,7 @@ variable "location" {
 variable "aks_version" {
   type        = string
   description = "The Azure region where the resources will be created."
-  default     = "1.17.7"
+  default     = "1.18.6"
 }
 
 variable "node_count" {
@@ -84,6 +88,11 @@ variable "acr_name" {
   description = "The Azure Container Registry name to setup for pull permissions."
 }
 
+variable "aks_admin_group_id" {
+  type        = string
+  description = "The ID of an AAD group that will be assigned as the AAD Admin for the Kubernetes cluster."
+}
+
 variable "authorized_ip_addresses" {
   type        = list(string)
   description = "A list of CIDR block strings that can access the Kubernetes API endpoint."
@@ -128,6 +137,17 @@ resource "azurerm_resource_group" "group" {
   location = var.location
 }
 
+# data "azuread_user" "admin" {
+#   user_principal_name = var.administrator
+# }
+
+# resource "azuread_group" "admin_group" {
+#   name    = "${local.base_name}-admins"
+#   members = [
+#     data.azuread_user.admin.object_id
+#   ]
+# }
+
 resource "azurerm_kubernetes_cluster" "aks" {
   name                = local.base_name
   resource_group_name = azurerm_resource_group.group.name
@@ -164,7 +184,10 @@ resource "azurerm_kubernetes_cluster" "aks" {
     enabled = true
     
     azure_active_directory {
-      managed = true
+      managed                = true
+      admin_group_object_ids = [
+        var.aks_admin_group_id
+      ]
     }
   }
   
@@ -192,7 +215,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
     network_plugin     = "azure"
     service_cidr       = "172.16.0.0/16"
     dns_service_ip     = "172.16.0.10"
-    docker_bridge_cidr = "172.17.0.1/16"
+    docker_bridge_cidr = "172.24.0.1/16"
   }
 
   # lifecycle {
