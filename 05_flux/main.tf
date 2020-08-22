@@ -90,6 +90,11 @@ resource "helm_release" "flux" {
     name  = "git.pollInterval"
     value = var.flux_poll_interval
   }
+  
+  set {
+    name = "registry.acr.enabled"
+    value = true
+  }
 
   set {
     name  = "manifestGeneration"
