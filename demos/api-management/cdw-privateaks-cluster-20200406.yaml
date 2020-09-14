@@ -1,0 +1,75 @@
+# NOTE: Before deploying to a production environment, please review the documentation -> https://aka.ms/self-hosted-gateway-production
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cdw-privateaks-cluster-20200406-env
+  namespace: apim-testing
+data:
+  config.service.endpoint: "https://cdw-apimgmt-20191022.management.azure-api.net/subscriptions/b9c770d1-cde9-4da3-ae40-95ce1a4fac0c/resourceGroups/cdw-apimgmt-20190821/providers/Microsoft.ApiManagement/service/cdw-apimgmt-20191022?api-version=2019-12-01"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cdw-privateaks-cluster-20200406
+  namespace: apim-testing
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cdw-privateaks-cluster-20200406
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 25%
+  template:
+    metadata:
+      labels:
+        app: cdw-privateaks-cluster-20200406
+    spec:
+      terminationGracePeriodSeconds: 60
+      containers:
+      - name: cdw-privateaks-cluster-20200406
+        image: mcr.microsoft.com/azure-api-management/gateway:latest
+        ports:
+        - name: http
+          containerPort: 8080
+        - name: https
+          containerPort: 8081
+        readinessProbe:
+          httpGet:
+            path: /internal-status-0123456789abcdef
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 0
+          periodSeconds: 5
+          failureThreshold: 3
+          successThreshold: 1
+        env:
+        - name: config.service.auth
+          valueFrom:
+            secretKeyRef:
+              name: cdw-privateaks-cluster-20200406-token
+              key: value
+        envFrom:
+        - configMapRef:
+            name: cdw-privateaks-cluster-20200406-env
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cdw-privateaks-cluster-20200406
+  namespace: apim-testing
+spec:
+  type: LoadBalancer
+  externalTrafficPolicy: Local
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+  - name: https
+    port: 443
+    targetPort: 8081
+  selector:
+    app: cdw-privateaks-cluster-20200406
